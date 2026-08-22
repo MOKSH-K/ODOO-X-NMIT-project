@@ -2,7 +2,7 @@ import mysql.connector
 import sqlfunc
 host='localhost'
 user='root'
-password='Hussain13620_root'
+password='Hussain13620_root'#replace with your password
 database='dayflow_hrms'
 # 1. User and Authentication
 table_name1='UserAndAuth'
