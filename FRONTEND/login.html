@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dayflow | Login</title>
   <style>
+<<<<<<< HEAD
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, Arial, sans-serif; }
     body { min-height: 100vh; background: #f5f7fb; color: #182230; display: flex; align-items: center; justify-content: center; padding: 24px; }
     .page { width: min(1100px, 100%); min-height: 650px; background: #ffffff; border-radius: 28px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; box-shadow: 0 20px 60px rgba(20, 35, 60, 0.12); }
@@ -37,6 +38,362 @@
     .message.success { display: block; background: #ecfdf3; color: #027a48; }
     .message.error { display: block; background: #fef3f2; color: #b42318; }
     @media (max-width: 800px) { .page { grid-template-columns: 1fr; } .brand-panel { min-height: 360px; padding: 35px; } .form-panel { padding: 40px 28px; } }
+=======
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f5f7fb;
+      color: #182230;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .page {
+      width: min(1100px, 100%);
+      min-height: 650px;
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 0 20px 60px rgba(20, 35, 60, 0.12);
+    }
+
+    .brand-panel {
+      background: linear-gradient(145deg, #172554, #1e3a8a);
+      color: white;
+      padding: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::before,
+    .brand-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .brand-panel::before {
+      width: 320px;
+      height: 320px;
+      right: -130px;
+      top: -110px;
+    }
+
+    .brand-panel::after {
+      width: 240px;
+      height: 240px;
+      left: -110px;
+      bottom: -90px;
+    }
+
+    .logo {
+      position: relative;
+      z-index: 1;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #93c5fd;
+    }
+
+    .brand-content {
+      position: relative;
+      z-index: 1;
+      max-width: 430px;
+    }
+
+    .brand-content h1 {
+      font-size: clamp(38px, 4vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+    }
+
+    .brand-content p {
+      color: #dbeafe;
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 390px;
+    }
+
+    .feature-list {
+      position: relative;
+      z-index: 1;
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #e0ecff;
+      font-size: 14px;
+    }
+
+    .check {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.12);
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+    }
+
+    .form-panel {
+      padding: 55px clamp(30px, 5vw, 70px);
+      display: flex;
+      align-items: center;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 420px;
+      margin: auto;
+    }
+
+    .form-heading h2 {
+      font-size: 32px;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .form-heading p {
+      color: #667085;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f2f4f7;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      padding: 11px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #667085;
+      transition: 0.2s;
+    }
+
+    .tab.active {
+      background: white;
+      color: #1d4ed8;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      margin-bottom: 8px;
+      color: #344054;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #d0d5dd;
+      border-radius: 11px;
+      padding: 0 14px;
+      outline: none;
+      background: white;
+      color: #182230;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.09);
+    }
+
+    .password-row {
+      position: relative;
+    }
+
+    .password-row input {
+      padding-right: 65px;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      color: #2563eb;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 5px 0 22px;
+      font-size: 12px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #667085;
+    }
+
+    .remember input {
+      width: 15px;
+      height: 15px;
+      accent-color: #2563eb;
+    }
+
+    .forgot {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .main-btn {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 11px;
+      background: #2563eb;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .main-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .main-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 13px;
+      border-radius: 9px;
+      font-size: 12px;
+    }
+
+    .message.success {
+      display: block;
+      background: #ecfdf3;
+      color: #027a48;
+    }
+
+    .message.error {
+      display: block;
+      background: #fef3f2;
+      color: #b42318;
+    }
+
+    .terms {
+      color: #98a2b3;
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+      margin-top: 20px;
+      
+    }
+    .hrhtml{
+      text-decoration: none;
+    }
+
+    @media (max-width: 800px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-panel {
+        min-height: 360px;
+        padding: 35px;
+      }
+
+      .brand-content h1 {
+        font-size: 40px;
+      }
+
+      .feature-list {
+        display: none;
+      }
+
+      .form-panel {
+        padding: 40px 28px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      body {
+        padding: 10px;
+      }
+
+      .page {
+        border-radius: 20px;
+      }
+
+      .brand-panel {
+        min-height: 300px;
+        padding: 28px;
+      }
+
+      .form-panel {
+        padding: 30px 20px;
+      }
+    }
+>>>>>>> 096b2c8c6915e2ec7be07a72c9b0e2bd4a2e3890
   </style>
 </head>
 <body>
@@ -70,7 +427,42 @@
             <label for="loginPassword">Password</label>
             <input type="password" id="loginPassword" placeholder="Enter your password" required>
           </div>
+<<<<<<< HEAD
           <button class="main-btn" id="loginButton" type="submit">Sign In</button>
+=======
+
+          <div class="roleplay">
+            What is your role?
+            <br>
+            <button class="hrhtml">
+              <a href="hr_home.html">
+              HR
+            </a>
+            </button>
+            <br>
+            <button class="hremployee">
+                          <a href="homepage.html">
+              EMPLOYEE
+            </a>
+            </button>
+          </div>
+
+          <div class="options">
+            <label class="remember">
+              <input type="checkbox">
+              Remember me
+            </label>
+
+            <a href="#" class="forgot" onclick="return false;">
+              Forgot password?
+            </a>
+          </div>
+
+          <a href="homepage.html">
+            <button class="main-btn" id="loginButton" type="submit">Sign In</button>
+          </a>
+
+>>>>>>> 096b2c8c6915e2ec7be07a72c9b0e2bd4a2e3890
           <div class="message" id="loginMessage"></div>
         </form>
 
@@ -84,6 +476,7 @@
             <input type="email" id="signupEmail" placeholder="you@company.com" required>
           </div>
           <div class="field">
+<<<<<<< HEAD
             <label for="role">Role</label>
             <select id="role" required>
               <option value="Employee">Employee</option>
@@ -91,6 +484,8 @@
             </select>
           </div>
           <div class="field">
+=======
+>>>>>>> 096b2c8c6915e2ec7be07a72c9b0e2bd4a2e3890
             <label for="signupPassword">Password</label>
             <input type="password" id="signupPassword" placeholder="Create a password" minlength="8" required>
           </div>
@@ -148,7 +543,15 @@
       const button = document.getElementById("loginButton");
       button.disabled = true; button.textContent = "Signing in...";
 
+<<<<<<< HEAD
       const data = { Email: document.getElementById("loginEmail").value };
+=======
+      const data = {
+        email: document.getElementById("loginEmail").value,
+        password:
+         document.getElementById("loginPassword").value
+      };
+>>>>>>> 096b2c8c6915e2ec7be07a72c9b0e2bd4a2e3890
 
       try {
         const response = await fetch("http://127.0.0.1:5000/api/login", {
