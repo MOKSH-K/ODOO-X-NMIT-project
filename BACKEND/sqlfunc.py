@@ -18,7 +18,7 @@ def insertdata(_host,_user,_password,_database,table_name:str,data:dict):
     connection=get_db_connection(_host,_user,_password,_database)
     cursor=connection.cursor()
     columns=",".join(data.keys())
-    values=",".join(data.values())
+    values=tuple(data.values())
     place_holders=",".join(["%s"]*len(data))
     query=f"INSERT INTO {table_name} ({columns}) VALUES ({place_holders})"
     cursor.execute(query,values)
@@ -27,7 +27,7 @@ def insertdata(_host,_user,_password,_database,table_name:str,data:dict):
     cursor.close()
     connection.close()
 def displayall(_host,_user,_password,_database,table_name:str):
-    connection=get_db_connection(_host,_user,_password,_database,table_name)
+    connection=get_db_connection(_host,_user,_password,_database)
     cursor=connection.cursor()
     query=f"SELECT * FROM {table_name}"
     cursor.execute(query)
