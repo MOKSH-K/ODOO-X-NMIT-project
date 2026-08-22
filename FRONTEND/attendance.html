@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dayflow - Attendance</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #f5f8fc; color: #1f2937; }
+        .header { height: 70px; background-color: white; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; padding: 0 40px;}
+        .logo { font-size: 26px; font-weight: bold; color: #1677d2; }
+        .logout { border: 1px solid #d1d5db; padding: 9px 16px; border-radius: 7px; cursor: pointer; }
+        .layout { display: flex; min-height: calc(100vh - 70px); }
+        .sidebar { width: 230px; background-color: #102a43; padding: 25px 15px; }
+        .sidebar a { display: block; text-decoration: none; color: #cbd5e1; padding: 13px 15px; margin-bottom: 5px; border-radius: 7px; }
+        .sidebar a.active { background-color: #1677d2; color: white; }
+        .content { flex: 1; padding: 35px; }
+        .history-card { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 25px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 14px; border-bottom: 1px solid #edf1f5; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">dayflow</div>
+        <button class="logout" onclick="logout()">Logout</button>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="homepage.html">Dashboard</a>
+            <a href="profile.html">Profile</a>
+            <a href="attendance.html" class="active">Attendance</a>
+            <a href="leave.html">Leave Requests</a>
+            <a href="payroll.html">Payroll</a>
+        </aside>
+
+        <main class="content">
+            <div class="history-card">
+                <h2>Attendance History</h2><br>
+                <table>
+                    <thead>
+                        <tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="attendance-tbody">
+                        <tr><td colspan="4">Loading attendance...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const empId = localStorage.getItem("employee_id");
+        if (!empId) window.location.href = "login.html";
+
+        async function loadAttendance() {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/attendance/${empId}`);
+                const result = await response.json();
+                
+                const tbody = document.getElementById('attendance-tbody');
+                tbody.innerHTML = ''; // Clear loading text
+
+                if (response.ok && result.data && result.data.length > 0) {
+                    result.data.forEach(record => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${new Date(record.Log_Date).toLocaleDateString()}</td>
+                            <td>${record.Check_In_Time || '--'}</td>
+                            <td>${record.Check_Out_Time || '--'}</td>
+                            <td>${record.Status}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4">No attendance records found.</td></tr>';
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        function logout() { localStorage.clear(); window.location.href = "login.html"; }
+        loadAttendance();
+    </script>
+</body>
+</html>

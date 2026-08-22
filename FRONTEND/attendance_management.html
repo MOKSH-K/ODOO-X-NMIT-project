@@ -1,0 +1,49 @@
+<script>
+        async function loadAdminAttendance() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/api/admin/attendance/today");
+                const result = await response.json();
+                
+                // Target the table body
+                const tbody = document.querySelector("#attendanceTable tbody");
+                tbody.innerHTML = ""; // Clear the hardcoded frontend data
+                
+                if (response.ok && result.data && result.data.length > 0) {
+                    result.data.forEach(rec => {
+                        const initials = rec.Name ? rec.Name.substring(0,2).toUpperCase() : "EMP";
+                        const statusClass = rec.Status === 'Present' ? 'present' : (rec.Status === 'Leave' ? 'on-leave' : 'absent');
+                        
+                        tbody.innerHTML += `
+                        <tr>
+                            <td>
+                                <div class="employee">
+                                    <div class="avatar">${initials}</div>
+                                    <div>
+                                        <div class="employee-name">${rec.Name || 'Unknown'}</div>
+                                        <div class="employee-id">ID: ${rec.Employee_ID}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>--</td>
+                            <td>${new Date().toLocaleDateString()}</td>
+                            <td>${rec.Check_In_Time || '--'}</td>
+                            <td>${rec.Check_Out_Time || '--'}</td>
+                            <td>--</td>
+                            <td><span class="status ${statusClass}">${rec.Status}</span></td>
+                        </tr>`;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="7">No attendance records today.</td></tr>`;
+                }
+            } catch (error) { 
+                console.error("Error connecting to API:", error); 
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        loadAdminAttendance(); // Run on page load
+    </script>

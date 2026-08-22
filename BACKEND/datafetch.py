@@ -177,3 +177,53 @@ def get_active_on_leave_count():
     cursor.close()
     connection.close()
     return total_on_leave
+# ==========================================
+# ADMIN: GET ALL EMPLOYEES & PROFILES
+# ==========================================
+def get_all_employees():
+    connection = sqlfunc.get_db_connection()
+    if not connection:
+        return []
+    cursor = connection.cursor(dictionary=True)
+    try:
+        query = """
+            SELECT u.Employee_ID, u.Email, u.UserRole, 
+                   p.Name, p.Department, p.Designation, p.Phone_no 
+            FROM UserAndAuth u
+            LEFT JOIN EMPprof p ON u.Employee_ID = p.Employee_ID
+        """
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except Exception as e:
+        print(f"Error fetching employees: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+# ==========================================
+# ADMIN: GET ALL PAYROLL RECORDS
+# ==========================================
+def get_all_payroll():
+    connection = sqlfunc.get_db_connection()
+    if not connection:
+        return []
+    cursor = connection.cursor(dictionary=True)
+    try:
+        query = """
+            SELECT pay.Payroll_ID, pay.Employee_ID, pay.Base_Salary, 
+                   pay.Allowances, pay.Deductions, pay.Net_Pay, pay.Pay_Period,
+                   p.Name, p.Department 
+            FROM Payroll pay
+            LEFT JOIN EMPprof p ON pay.Employee_ID = p.Employee_ID
+        """
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except Exception as e:
+        print(f"Error fetching payroll: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()

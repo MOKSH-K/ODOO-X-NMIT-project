@@ -4,512 +4,78 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dayflow | Home</title>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Inter, Arial, sans-serif;
-    }
-
-    body {
-      background: #f5f7fb;
-      color: #182230;
-      min-height: 100vh;
-    }
-
-    /* NAVBAR */
-    .navbar {
-      height: 72px;
-      background: white;
-      border-bottom: 1px solid #eaecf0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 6%;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .logo {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      color: #172554;
-    }
-
-    .logo span {
-      color: #2563eb;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .welcome-small {
-      font-size: 13px;
-      color: #667085;
-    }
-
-    .profile-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #dbeafe;
-      color: #1d4ed8;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-    }
-
-    /* MAIN */
-    .container {
-      width: min(1100px, 88%);
-      margin: 0 auto;
-      padding: 42px 0 60px;
-    }
-
-    .hero {
-      background: linear-gradient(135deg, #172554, #2563eb);
-      color: white;
-      border-radius: 22px;
-      padding: 36px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 30px;
-      margin-bottom: 30px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.07);
-      right: -80px;
-      top: -100px;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-content p {
-      color: #bfdbfe;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .hero-content h1 {
-      font-size: 32px;
-      letter-spacing: -1px;
-      margin-bottom: 10px;
-    }
-
-    .hero-content .subtext {
-      color: #dbeafe;
-      font-size: 14px;
-    }
-
-    .date-box {
-      position: relative;
-      z-index: 1;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      padding: 17px 22px;
-      min-width: 160px;
-      text-align: center;
-    }
-
-    .date-box .day {
-      font-size: 24px;
-      font-weight: 750;
-    }
-
-    .date-box .date {
-      font-size: 12px;
-      color: #dbeafe;
-      margin-top: 4px;
-    }
-
-    /* SECTION TITLE */
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 0 0 16px;
-    }
-
-    .section-title h2 {
-      font-size: 19px;
-      letter-spacing: -0.3px;
-    }
-
-    .section-title span {
-      font-size: 12px;
-      color: #667085;
-    }
-
-    /* QUICK CARDS */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #eaecf0;
-      border-radius: 16px;
-      padding: 21px;
-      min-height: 145px;
-      text-decoration: none;
-      color: inherit;
-      transition: 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(16, 24, 40, 0.08);
-      border-color: #cbd5e1;
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      background: #eff6ff;
-      color: #2563eb;
-      font-size: 18px;
-      margin-bottom: 17px;
-    }
-
-    .card h3 {
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .card p {
-      color: #667085;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    /* LOWER SECTION */
-    .bottom-grid {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 18px;
-    }
-
-    .panel {
-      background: white;
-      border: 1px solid #eaecf0;
-      border-radius: 16px;
-      padding: 24px;
-    }
-
-    .panel h3 {
-      font-size: 16px;
-      margin-bottom: 18px;
-    }
-
-    /* ATTENDANCE */
-    .attendance-status {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px;
-      background: #f8fafc;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #12b76a;
-    }
-
-    .status-text strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 3px;
-    }
-
-    .status-text span {
-      font-size: 11px;
-      color: #667085;
-    }
-
-    .time {
-      font-size: 13px;
-      font-weight: 700;
-      color: #344054;
-    }
-
-    .view-link {
-      color: #2563eb;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 650;
-    }
-
-    /* ACTIVITY */
-    .activity {
-      display: flex;
-      gap: 12px;
-      padding: 11px 0;
-      border-bottom: 1px solid #f2f4f7;
-    }
-
-    .activity:last-child {
-      border-bottom: none;
-    }
-
-    .activity-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 9px;
-      background: #eff6ff;
-      color: #2563eb;
-      display: grid;
-      place-items: center;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-
-    .activity p {
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .activity span {
-      display: block;
-      color: #98a2b3;
-      font-size: 10px;
-      margin-top: 3px;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 850px) {
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .bottom-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 550px) {
-      .navbar {
-        padding: 0 5%;
-      }
-
-      .welcome-small {
-        display: none;
-      }
-
-      .container {
-        width: 92%;
-        padding-top: 25px;
-      }
-
-      .hero {
-        padding: 28px 24px;
-        flex-direction: column;
-      }
-
-      .hero-content h1 {
-        font-size: 27px;
-      }
-
-      .date-box {
-        width: 100%;
-      }
-
-      .cards {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      .card {
-        padding: 16px;
-      }
-
-      .panel {
-        padding: 19px;
-      }
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, Arial, sans-serif; }
+    body { background: #f5f7fb; color: #182230; min-height: 100vh; }
+    .navbar { height: 72px; background: white; border-bottom: 1px solid #eaecf0; display: flex; align-items: center; justify-content: space-between; padding: 0 6%; position: sticky; top: 0; z-index: 10; }
+    .logo { font-size: 26px; font-weight: 800; letter-spacing: -1px; color: #172554; }
+    .logo span { color: #2563eb; }
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+    .logout-btn { border: 1px solid #d1d5db; background-color: white; padding: 7px 14px; border-radius: 7px; cursor: pointer; }
+    .container { width: min(1100px, 88%); margin: 0 auto; padding: 42px 0 60px; }
+    .hero { background: linear-gradient(135deg, #172554, #2563eb); color: white; border-radius: 22px; padding: 36px 40px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .hero-content h1 { font-size: 32px; margin-bottom: 10px; }
+    .date-box { background: rgba(255,255,255,0.12); border-radius: 14px; padding: 17px 22px; text-align: center; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .card { background: white; border: 1px solid #eaecf0; border-radius: 16px; padding: 21px; text-decoration: none; color: inherit; transition: 0.2s ease; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(16, 24, 40, 0.08); }
+    .card-icon { width: 40px; height: 40px; border-radius: 11px; background: #eff6ff; display: grid; place-items: center; margin-bottom: 17px; }
   </style>
 </head>
-
 <body>
-
-  <!-- NAVBAR -->
   <header class="navbar">
     <div class="logo">day<span>flow</span></div>
-
     <div class="nav-right">
-      <span class="welcome-small">Welcome back</span>
-      <div class="profile-circle">A</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </header>
 
-
   <main class="container">
-
-    <!-- WELCOME -->
     <section class="hero">
       <div class="hero-content">
         <p>Employee Dashboard</p>
-        <h1>Good morning, Alex 👋</h1>
-        <div class="subtext">
-          Here's a quick overview of your workday.
-        </div>
+        <h1 id="welcomeMessage">Good morning, Loading... 👋</h1>
       </div>
-
       <div class="date-box">
-        <div class="day" id="day">Today</div>
+        <div class="day">Today</div>
         <div class="date" id="date"></div>
       </div>
     </section>
 
-
-    <!-- QUICK ACCESS -->
-    <div class="section-title">
-      <h2>Quick access</h2>
-      <span>Manage your workday</span>
-    </div>
-
     <section class="cards">
-
-      <a href="profile.html" class="card">
-        <div class="card-icon">👤</div>
-        <h3>My Profile</h3>
-        <p>View your personal and job details.</p>
-      </a>
-
-      <a href="attendence.html" class="card">
-        <div class="card-icon">🕐</div>
-        <h3>Attendance</h3>
-        <p>Check your daily and weekly attendance.</p>
-      </a>
-
-      <a href="leave.html" class="card">
-        <div class="card-icon">📅</div>
-        <h3>Leave Requests</h3>
-        <p>Apply for leave and track your requests.</p>
-      </a>
-
-      <a href="payroll.html" class="card">
-        <div class="card-icon">💳</div>
-        <h3>Salary Details</h3>
-        <p>View your salary and payroll information.</p>
-      </a>
-
+      <a href="profile.html" class="card"><div class="card-icon">👤</div><h3>My Profile</h3></a>
+      <a href="attendance.html" class="card"><div class="card-icon">🕐</div><h3>Attendance</h3></a>
+      <a href="leave.html" class="card"><div class="card-icon">📅</div><h3>Leave Requests</h3></a>
+      <a href="payroll.html" class="card"><div class="card-icon">💳</div><h3>Salary Details</h3></a>
     </section>
-
-
-    <!-- LOWER CONTENT -->
-    <section class="bottom-grid">
-
-      <!-- TODAY'S ATTENDANCE -->
-      <div class="panel">
-        <h3>Today's attendance</h3>
-
-        <div class="attendance-status">
-          <div class="status-left">
-            <div class="status-dot"></div>
-
-            <div class="status-text">
-              <strong>Present</strong>
-              <span>Checked in today</span>
-            </div>
-          </div>
-
-          <div class="time">09:12 AM</div>
-        </div>
-        <a href="attendence.html" class="view-link">
-          View attendance →
-        </a>
-      </div>
-
-
-      <!-- RECENT ACTIVITY -->
-      <div class="panel">
-        <h3>Recent activity</h3>
-
-        <div class="activity">
-          <div class="activity-icon">✓</div>
-          <p>
-            Attendance marked
-            <span>Today, 09:12 AM</span>
-          </p>
-        </div>
-
-        <div class="activity">
-          <div class="activity-icon">📅</div>
-          <p>
-            Leave request status: Pending
-            <span>Yesterday</span>
-          </p>
-        </div>
-
-        <div class="activity">
-          <div class="activity-icon">👤</div>
-          <p>
-            Profile information updated
-            <span>3 days ago</span>
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-
   </main>
 
-
   <script>
-    // Display today's date automatically.
-    const today = new Date();
+    // 1. Check if logged in
+    const empId = localStorage.getItem("employee_id");
+    if (!empId) window.location.href = "login.html";
 
-    const options = {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-      year: "numeric"
-    };
+    // 2. Fetch Dashboard Profile
+    async function loadDashboard() {
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/api/profile/${empId}`);
+            const result = await response.json();
+            if (response.ok && result.data) {
+                const firstName = result.data.Name.split(' ')[0];
+                document.getElementById('welcomeMessage').innerText = `Good morning, ${firstName} 👋`;
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
 
-    document.getElementById("date").textContent =
-      today.toLocaleDateString("en-US", options);
+    function logout() {
+        localStorage.clear();
+        window.location.href = "login.html";
+    }
+
+    document.getElementById("date").textContent = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    loadDashboard();
   </script>
-
 </body>
 </html>

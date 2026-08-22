@@ -4,991 +4,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Dayflow - Employees</title>
-
     <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f5f8fc;
-            color: #1f2937;
-        }
-
-        /* ================= HEADER ================= */
-
-        .header {
-            height: 70px;
-            background-color: white;
-            border-bottom: 1px solid #e5e7eb;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 0 40px;
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: bold;
-            color: #1677d2;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-name {
-            color: #374151;
-            font-size: 15px;
-        }
-
-        .logout {
-            border: 1px solid #d1d5db;
-            background-color: white;
-            padding: 9px 16px;
-            border-radius: 7px;
-            cursor: pointer;
-        }
-
-        .logout:hover {
-            background-color: #f3f4f6;
-        }
-
-        /* ================= LAYOUT ================= */
-
-        .layout {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar {
-            width: 240px;
-            background-color: #102a43;
-            padding: 25px 15px;
-        }
-
-        .sidebar-title {
-            color: #8fa8bf;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 0 15px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .sidebar a {
-            display: block;
-            text-decoration: none;
-            color: #cbd5e1;
-
-            padding: 13px 15px;
-            margin-bottom: 5px;
-
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        .sidebar a:hover {
-            background-color: #1c3b5a;
-            color: white;
-        }
-
-        .sidebar a.active {
-            background-color: #1677d2;
-            color: white;
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content {
-            flex: 1;
-            padding: 35px;
-            max-width: 1200px;
-        }
-
-        .page-title {
-            margin-bottom: 25px;
-        }
-
-        .page-title h1 {
-            font-size: 30px;
-            margin-bottom: 7px;
-        }
-
-        .page-title p {
-            color: #6b7280;
-        }
-
-        /* ================= TOP SECTION ================= */
-
-        .top-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            margin-bottom: 20px;
-
-            gap: 15px;
-        }
-
-        .search-box {
-            flex: 1;
-            max-width: 450px;
-        }
-
-        .search-box input {
-            width: 100%;
-
-            padding: 12px 14px;
-
-            border: 1px solid #d9e1eb;
-            border-radius: 8px;
-
-            outline: none;
-            background-color: white;
-        }
-
-        .search-box input:focus {
-            border-color: #1677d2;
-            box-shadow: 0 0 0 3px #1677d21a;
-        }
-
-        .add-button {
-            border: none;
-            background-color: #1677d2;
-            color: white;
-
-            padding: 12px 18px;
-
-            border-radius: 7px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-        .add-button:hover {
-            background-color: #0f63b5;
-        }
-
-        /* ================= EMPLOYEE CARD ================= */
-
-        .employee-card {
-            background-color: white;
-
-            border: 1px solid #e5e7eb;
-
-            border-radius: 12px;
-
-            padding: 25px;
-        }
-
-        .employee-card h2 {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* ================= TABLE ================= */
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            text-align: left;
-
-            padding: 15px 12px;
-
-            border-bottom: 1px solid #edf1f5;
-
-            font-size: 14px;
-        }
-
-        th {
-            color: #6b7280;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        /* ================= EMPLOYEE ================= */
-
-        .employee {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 38px;
-            height: 38px;
-
-            border-radius: 50%;
-
-            background-color: #e5f1ff;
-            color: #1677d2;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .employee-name {
-            font-weight: 600;
-        }
-
-        .employee-email {
-            color: #6b7280;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        /* ================= STATUS ================= */
-
-        .status {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-        }
-
-        .active-status {
-            background-color: #e9f8ef;
-            color: #23733d;
-        }
-
-        .inactive-status {
-            background-color: #fff0f0;
-            color: #a52e2e;
-        }
-
-        /* ================= ACTION BUTTONS ================= */
-
-        .actions {
-            display: flex;
-            gap: 7px;
-        }
-
-        .action-button {
-            border: 1px solid #d9e1eb;
-
-            background-color: white;
-
-            padding: 7px 11px;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            font-size: 12px;
-        }
-
-        .action-button:hover {
-            background-color: #f5f9ff;
-            border-color: #1677d2;
-            color: #1677d2;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 850px) {
-
-            .layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-
-                display: flex;
-
-                overflow-x: auto;
-
-                padding: 15px;
-            }
-
-            .sidebar-title {
-                display: none;
-            }
-
-            .sidebar a {
-                min-width: 130px;
-                text-align: center;
-            }
-
-            .content {
-                padding: 20px;
-            }
-
-            .top-section {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-box {
-                max-width: none;
-            }
-        }
-
-        @media (max-width: 550px) {
-
-            .header {
-                padding: 0 20px;
-            }
-
-            .user-name {
-                display: none;
-            }
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #f5f8fc; color: #1f2937; }
+        .header { height: 70px; background-color: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+        .logo { font-size: 26px; font-weight: bold; color: #1677d2; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .user-name { color: #374151; font-size: 15px; }
+        .logout { border: 1px solid #d1d5db; background-color: white; padding: 9px 16px; border-radius: 7px; cursor: pointer; }
+        .logout:hover { background-color: #f3f4f6; }
+        .layout { display: flex; min-height: calc(100vh - 70px); }
+        .sidebar { width: 240px; background-color: #102a43; padding: 25px 15px; }
+        .sidebar-title { color: #8fa8bf; font-size: 11px; font-weight: bold; padding: 0 15px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar a { display: block; text-decoration: none; color: #cbd5e1; padding: 13px 15px; margin-bottom: 5px; border-radius: 7px; font-size: 15px; }
+        .sidebar a:hover { background-color: #1c3b5a; color: white; }
+        .sidebar a.active { background-color: #1677d2; color: white; }
+        .content { flex: 1; padding: 35px; max-width: 1200px; }
+        .page-title { margin-bottom: 25px; }
+        .page-title h1 { font-size: 30px; margin-bottom: 7px; }
+        .page-title p { color: #6b7280; }
+        .top-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; }
+        .search-box { flex: 1; max-width: 450px; }
+        .search-box input { width: 100%; padding: 12px 14px; border: 1px solid #d9e1eb; border-radius: 8px; outline: none; background-color: white; }
+        .search-box input:focus { border-color: #1677d2; box-shadow: 0 0 0 3px #1677d21a; }
+        .add-button { border: none; background-color: #1677d2; color: white; padding: 12px 18px; border-radius: 7px; font-weight: bold; cursor: pointer; }
+        .add-button:hover { background-color: #0f63b5; }
+        .employee-card { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 25px; }
+        .employee-card h2 { font-size: 20px; margin-bottom: 20px; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 15px 12px; border-bottom: 1px solid #edf1f5; font-size: 14px; }
+        th { color: #6b7280; font-size: 13px; font-weight: 600; }
+        tbody tr:hover { background-color: #f8fafc; }
+        .employee { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; background-color: #e5f1ff; color: #1677d2; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+        .employee-name { font-weight: 600; }
+        .employee-email { color: #6b7280; font-size: 12px; margin-top: 3px; }
+        .status { display: inline-block; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .active-status { background-color: #e9f8ef; color: #23733d; }
+        .inactive-status { background-color: #fff0f0; color: #a52e2e; }
+        .actions { display: flex; gap: 7px; }
+        .action-button { border: 1px solid #d9e1eb; background-color: white; padding: 7px 11px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .action-button:hover { background-color: #f5f9ff; border-color: #1677d2; color: #1677d2; }
+        @media (max-width: 850px) { .layout { flex-direction: column; } .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 15px; } .sidebar-title { display: none; } .sidebar a { min-width: 130px; text-align: center; } .content { padding: 20px; } .top-section { flex-direction: column; align-items: stretch; } .search-box { max-width: none; } }
+        @media (max-width: 550px) { .header { padding: 0 20px; } .user-name { display: none; } }
     </style>
-
 </head>
 
-
 <body>
-
-
-    <!-- ================= HEADER ================= -->
-
     <header class="header">
-
-        <div class="logo">
-            dayflow
-        </div>
-
+        <div class="logo">dayflow</div>
         <div class="header-right">
-
-            <span class="user-name">
-                HR Manager
-            </span>
-
-            <button class="logout">
-                Logout
-            </button>
-
+            <span class="user-name">HR Manager</span>
+            <button class="logout" onclick="logout()">Logout</button>
         </div>
-
     </header>
 
-
-
-    <!-- ================= LAYOUT ================= -->
-
     <div class="layout">
-
-
-        <!-- ================= SIDEBAR ================= -->
-
         <aside class="sidebar">
-
-            <div class="sidebar-title">
-                HR Management
-            </div>
-
-            <a href="hr_home.html">
-                Dashboard
-            </a>
-
-            <a href="employees.html" class="active">
-                Employees
-            </a>
-
-            <a href="attendance_management.html">
-                Attendance
-            </a>
-
-            <a href="leave_approvals.html">
-                Leave Requests
-            </a>
-
-            <a href="payroll_management.html">
-                Payroll
-            </a>
-
+            <div class="sidebar-title">HR Management</div>
+            <a href="hr_home.html">Dashboard</a>
+            <a href="employees.html" class="active">Employees</a>
+            <a href="attendance_management.html">Attendance</a>
+            <a href="leave_approvals.html">Leave Requests</a>
+            <a href="payroll_management.html">Payroll</a>
         </aside>
 
-
-
-        <!-- ================= CONTENT ================= -->
-
         <main class="content">
-
-
-            <!-- PAGE TITLE -->
-
             <div class="page-title">
-
-                <h1>
-                    Employees
-                </h1>
-
-                <p>
-                    View and manage all employees in the organization.
-                </p>
-
+                <h1>Employees</h1>
+                <p>View and manage all employees in the organization.</p>
             </div>
-
-
-
-            <!-- ================= SEARCH + ADD ================= -->
 
             <div class="top-section">
-
                 <div class="search-box">
-
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Search employees..."
-                        onkeyup="searchEmployees()"
-                    >
-
+                    <input type="text" id="searchInput" placeholder="Search employees...">
                 </div>
-
-
-                <button
-                    class="add-button"
-                    onclick="addEmployee()"
-                >
-                    + Add Employee
-                </button>
-
+                <button class="add-button" onclick="openModal()">+ Add/Update Employee</button>
             </div>
-
-
-
-            <!-- ================= EMPLOYEE TABLE ================= -->
 
             <div class="employee-card">
-
-                <h2>
-                    Employee Directory
-                </h2>
-
-
+                <h2>Employee Directory</h2>
                 <div class="table-container">
-
                     <table id="employeeTable">
-
                         <thead>
-
                             <tr>
-
-                                <th>
-                                    Employee
-                                </th>
-
-                                <th>
-                                    Employee ID
-                                </th>
-
-                                <th>
-                                    Department
-                                </th>
-
-                                <th>
-                                    Role
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
-                                <th>
-                                    Action
-                                </th>
-
+                                <th>Employee</th>
+                                <th>Employee ID</th>
+                                <th>Department</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
-
                         </thead>
-
-
                         <tbody>
-
-
-                            <!-- EMPLOYEE 1 -->
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="employee">
-
-                                        <div class="avatar">
-                                            AS
-                                        </div>
-
-                                        <div>
-
-                                            <div class="employee-name">
-                                                Arun Sharma
-                                            </div>
-
-                                            <div class="employee-email">
-                                                arun@example.com
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-                                    DF1001
-                                </td>
-
-                                <td>
-                                    Engineering
-                                </td>
-
-                                <td>
-                                    Software Developer
-                                </td>
-
-                                <td>
-
-                                    <span class="status active-status">
-                                        Active
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="actions">
-
-                                        <button
-                                            class="action-button"
-                                            onclick="viewEmployee('DF1001')"
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            class="action-button"
-                                            onclick="editEmployee('DF1001')"
-                                        >
-                                            Edit
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <!-- EMPLOYEE 2 -->
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="employee">
-
-                                        <div class="avatar">
-                                            RK
-                                        </div>
-
-                                        <div>
-
-                                            <div class="employee-name">
-                                                Riya Kumar
-                                            </div>
-
-                                            <div class="employee-email">
-                                                riya@example.com
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-                                    DF1002
-                                </td>
-
-                                <td>
-                                    Design
-                                </td>
-
-                                <td>
-                                    UI Designer
-                                </td>
-
-                                <td>
-
-                                    <span class="status active-status">
-                                        Active
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="actions">
-
-                                        <button
-                                            class="action-button"
-                                            onclick="viewEmployee('DF1002')"
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            class="action-button"
-                                            onclick="editEmployee('DF1002')"
-                                        >
-                                            Edit
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <!-- EMPLOYEE 3 -->
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="employee">
-
-                                        <div class="avatar">
-                                            VP
-                                        </div>
-
-                                        <div>
-
-                                            <div class="employee-name">
-                                                Vikram Patel
-                                            </div>
-
-                                            <div class="employee-email">
-                                                vikram@example.com
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-                                    DF1003
-                                </td>
-
-                                <td>
-                                    Engineering
-                                </td>
-
-                                <td>
-                                    Backend Developer
-                                </td>
-
-                                <td>
-
-                                    <span class="status active-status">
-                                        Active
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="actions">
-
-                                        <button
-                                            class="action-button"
-                                            onclick="viewEmployee('DF1003')"
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            class="action-button"
-                                            onclick="editEmployee('DF1003')"
-                                        >
-                                            Edit
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <!-- EMPLOYEE 4 -->
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="employee">
-
-                                        <div class="avatar">
-                                            NS
-                                        </div>
-
-                                        <div>
-
-                                            <div class="employee-name">
-                                                Neha Singh
-                                            </div>
-
-                                            <div class="employee-email">
-                                                neha@example.com
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-                                    DF1004
-                                </td>
-
-                                <td>
-                                    Human Resources
-                                </td>
-
-                                <td>
-                                    HR Executive
-                                </td>
-
-                                <td>
-
-                                    <span class="status active-status">
-                                        Active
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="actions">
-
-                                        <button
-                                            class="action-button"
-                                            onclick="viewEmployee('DF1004')"
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            class="action-button"
-                                            onclick="editEmployee('DF1004')"
-                                        >
-                                            Edit
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <!-- EMPLOYEE 5 -->
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="employee">
-
-                                        <div class="avatar">
-                                            AV
-                                        </div>
-
-                                        <div>
-
-                                            <div class="employee-name">
-                                                Ananya Verma
-                                            </div>
-
-                                            <div class="employee-email">
-                                                ananya@example.com
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-                                    DF1005
-                                </td>
-
-                                <td>
-                                    Marketing
-                                </td>
-
-                                <td>
-                                    Marketing Executive
-                                </td>
-
-                                <td>
-
-                                    <span class="status inactive-status">
-                                        Inactive
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="actions">
-
-                                        <button
-                                            class="action-button"
-                                            onclick="viewEmployee('DF1005')"
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            class="action-button"
-                                            onclick="editEmployee('DF1005')"
-                                        >
-                                            Edit
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
+                            <tr><td colspan="6">Loading employees...</td></tr>
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
-
         </main>
-
     </div>
 
-
+    <!-- ================= ADD/EDIT EMPLOYEE MODAL ================= -->
+    <div id="employeeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 500px;">
+            <h2 id="modalTitle" style="margin-bottom: 20px;">Add / Edit Profile details</h2>
+            <form id="hrEmployeeForm" onsubmit="submitHrForm(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div><label style="font-size: 13px; color: #6b7280;">Employee ID</label><input type="number" id="hrEmpId" required style="width: 100%; padding: 8px; border: 1px solid #d9e1eb; border-radius: 6px;"></div>
+                    <div><label style="font-size: 13px; color: #6b7280;">Full Name</label><input type="text" id="hrName" required style="width: 100%; padding: 8px; border: 1px solid #d9e1eb; border-radius: 6px;"></div>
+                    <div><label style="font-size: 13px; color: #6b7280;">Department</label><input type="text" id="hrDept" style="width: 100%; padding: 8px; border: 1px solid #d9e1eb; border-radius: 6px;"></div>
+                    <div><label style="font-size: 13px; color: #6b7280;">Designation</label><input type="text" id="hrDesig" style="width: 100%; padding: 8px; border: 1px solid #d9e1eb; border-radius: 6px;"></div>
+                    <div><label style="font-size: 13px; color: #6b7280;">Phone Number</label><input type="number" id="hrPhone" style="width: 100%; padding: 8px; border: 1px solid #d9e1eb; border-radius: 6px;"></div>
+                    <div><label style="font-size: 13px; color: #6b7280;">Date of Joining</label><input type="date" id="hrDoj" style="width: 100%; padding: 8px; border: 1px solid #d9e1eb; border-radius: 6px;"></div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeModal()" style="padding: 10px 15px; border: 1px solid #d9e1eb; background: white; border-radius: 6px; cursor: pointer;">Cancel</button>
+                    <button type="submit" id="hrSaveBtn" style="padding: 10px 15px; background: #1677d2; color: white; border: none; border-radius: 6px; cursor: pointer;">Save Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- ================= JAVASCRIPT ================= -->
-
     <script>
-
-        function searchEmployees() {
-
-            const input =
-                document.getElementById("searchInput");
-
-            const filter =
-                input.value.toLowerCase();
-
-            const table =
-                document.getElementById("employeeTable");
-
-            const rows =
-                table.getElementsByTagName("tr");
-
-
-            for (let i = 1; i < rows.length; i++) {
-
-                const text =
-                    rows[i].textContent.toLowerCase();
-
-                if (text.includes(filter)) {
-
-                    rows[i].style.display = "";
-
-                } else {
-
-                    rows[i].style.display = "none";
-
+        async function loadEmployees() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/api/admin/employees");
+                const tbody = document.querySelector("#employeeTable tbody");
+                tbody.innerHTML = ""; 
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.data && result.data.length > 0) {
+                        result.data.forEach(emp => {
+                            const initials = emp.Name ? emp.Name.substring(0,2).toUpperCase() : "EMP";
+                            tbody.innerHTML += `
+                            <tr>
+                                <td>
+                                    <div class="employee">
+                                        <div class="avatar">${initials}</div>
+                                        <div>
+                                            <div class="employee-name">${emp.Name || 'Profile Incomplete'}</div>
+                                            <div class="employee-email">${emp.Email || '--'}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>${emp.Employee_ID}</td>
+                                <td>${emp.Department || '--'}</td>
+                                <td>${emp.UserRole || '--'}</td>
+                                <td><span class="status active-status">Active</span></td>
+                                <td>
+                                    <div class="actions">
+                                        <button class="action-button" onclick="openModal(${emp.Employee_ID})">Update Profile</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                        });
+                        return;
+                    }
                 }
+                tbody.innerHTML = `<tr><td colspan="6">No employees found.</td></tr>`;
+            } catch (error) { console.error("Error connecting to API:", error); }
+        }
 
+        function openModal(id) {
+            document.getElementById("employeeModal").style.display = "flex";
+            if(id) {
+                document.getElementById("hrEmpId").value = id;
+                document.getElementById("modalTitle").innerText = "Update Profile (ID: " + id + ")";
+            } else {
+                document.getElementById("hrEmpId").value = "";
+                document.getElementById("modalTitle").innerText = "Add New Profile";
             }
-
         }
 
-
-        function addEmployee() {
-
-            alert(
-                "Employee creation will be connected to the Flask backend later."
-            );
-
+        function closeModal() {
+            document.getElementById("employeeModal").style.display = "none";
+            document.getElementById("hrEmployeeForm").reset();
         }
 
-
-        function viewEmployee(id) {
-
-            alert(
-                "Viewing employee: " + id
-            );
-
+        async function submitHrForm(event) {
+            event.preventDefault();
+            const btn = document.getElementById("hrSaveBtn");
+            btn.textContent = "Saving...";
+            const payload = {
+                Employee_ID: parseInt(document.getElementById("hrEmpId").value),
+                Name: document.getElementById("hrName").value,
+                Department: document.getElementById("hrDept").value,
+                Designation: document.getElementById("hrDesig").value,
+                Phone_no: parseInt(document.getElementById("hrPhone").value),
+                DOJ: document.getElementById("hrDoj").value
+            };
+            try {
+                const response = await fetch("http://127.0.0.1:5000/api/insert/EMPprof", {
+                    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    alert("Profile Details Saved Successfully!");
+                    closeModal();
+                    loadEmployees(); 
+                } else {
+                    alert("Error saving profile. ID might already exist.");
+                }
+            } catch (error) { alert("Server connection failed."); } 
+            finally { btn.textContent = "Save Profile"; }
         }
 
-
-        function editEmployee(id) {
-
-            alert(
-                "Editing employee: " + id
-            );
-
-        }
-
+        function logout() { localStorage.clear(); window.location.href = "login.html"; }
+        loadEmployees(); 
     </script>
-
-
 </body>
-
 </html>
