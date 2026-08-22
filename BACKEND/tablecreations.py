@@ -3,7 +3,7 @@ import sqlfunc
 host='localhost'
 user='root'
 password='Hussain13620_root'
-database='Dayflow'
+database='dayflow_hrms'
 # 1. User and Authentication
 table_name1='UserAndAuth'
 schema1={"Employee_ID":"INT PRIMARY KEY",
