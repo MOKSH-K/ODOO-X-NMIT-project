@@ -2,8 +2,8 @@ import mysql.connector
 import sqlfunc
 host='localhost'
 user='root'
-password='Hussain13620_root'
-database='Dayflow'
+password='Hussain13620_root'#replace with your password
+database='dayflow_hrms'
 # 1. User and Authentication
 table_name1='UserAndAuth'
 schema1={"Employee_ID":"INT PRIMARY KEY",
@@ -14,7 +14,8 @@ schema1={"Employee_ID":"INT PRIMARY KEY",
 sqlfunc.createtable(host,user,password,database,table_name1,schema1)
 # 2. Employee Profile
 table_name2="EMPprof"
-schema2={"Name":"VARCHAR(100) NOT NULL",
+schema2={"Employee_ID":"INT",
+         "Name":"VARCHAR(100) NOT NULL",
          "Phone_no":"INT",
          "Address":"TEXT",
          "Profile_pic_url":"VARCHAR(255)",
