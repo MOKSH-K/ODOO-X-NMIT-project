@@ -10,7 +10,6 @@
         .header { height: 70px; background-color: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
         .logo { font-size: 26px; font-weight: bold; color: #1677d2; }
         .logout { border: 1px solid #d1d5db; background-color: white; padding: 9px 16px; border-radius: 7px; cursor: pointer; }
-        .logout:hover { background-color: #f3f4f6; }
         .layout { display: flex; min-height: calc(100vh - 70px); }
         .sidebar { width: 230px; background-color: #102a43; padding: 25px 15px; }
         .sidebar a { display: block; text-decoration: none; color: #cbd5e1; padding: 13px 15px; margin-bottom: 5px; border-radius: 7px; font-size: 15px; }
@@ -33,7 +32,6 @@
         td:last-child, th:last-child { text-align: right; }
         .total-row td { font-weight: bold; font-size: 15px; border-bottom: none; }
         .net-pay { color: #1677d2; font-size: 18px !important; }
-        @media (max-width: 750px) { .layout { flex-direction: column; } .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 15px; } .salary-summary { grid-template-columns: 1fr; } .employee-info { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -56,9 +54,9 @@
             <h1>Salary Details</h1><br>
 
             <div class="salary-summary">
-                <div class="salary-card"><small>Monthly Gross</small><strong id="gross-salary">₹45,000</strong></div>
-                <div class="salary-card"><small>Total Deductions</small><strong id="total-deductions">₹5,200</strong></div>
-                <div class="salary-card highlight"><small>Net Salary</small><strong id="net-salary">₹39,800</strong></div>
+                <div class="salary-card"><small>Monthly Gross</small><strong>₹45,000</strong></div>
+                <div class="salary-card"><small>Total Deductions</small><strong>₹5,200</strong></div>
+                <div class="salary-card highlight"><small>Net Salary</small><strong>₹39,800</strong></div>
             </div>
 
             <div class="salary-details">
@@ -74,11 +72,12 @@
                 <table>
                     <thead><tr><th>Component</th><th>Amount</th></tr></thead>
                     <tbody>
-                        <tr><td>Basic Salary</td><td id="base-sal">₹25,000</td></tr>
-                        <tr><td>Allowances</td><td id="allowances">₹10,000</td></tr>
-                        <tr class="total-row"><td>Gross Salary</td><td id="table-gross">₹45,000</td></tr>
-                        <tr><td>Deductions</td><td id="deductions">₹5,200</td></tr>
-                        <tr class="total-row"><td>Net Salary</td><td class="net-pay" id="table-net">₹39,800</td></tr>
+                        <tr><td>Basic Salary</td><td>₹25,000</td></tr>
+                        <tr><td>HRA</td><td>₹10,000</td></tr>
+                        <tr><td>Transport & Other</td><td>₹10,000</td></tr>
+                        <tr class="total-row"><td>Gross Salary</td><td>₹45,000</td></tr>
+                        <tr><td>PF & Tax</td><td>₹5,200</td></tr>
+                        <tr class="total-row"><td>Net Salary</td><td class="net-pay">₹39,800</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -91,40 +90,14 @@
 
         async function loadPayrollInfo() {
             try {
-                // Fetch profile to populate top section
-                const profileRes = await fetch(`http://127.0.0.1:5000/api/profile/${empId}`);
-                const profileResult = await profileRes.json();
+                // Fetch profile to populate the top section of the payslip
+                const response = await fetch(`http://127.0.0.1:5000/api/profile/${empId}`);
+                const result = await response.json();
                 
-                if (profileRes.ok && profileResult.data) {
-                    document.getElementById('pay-id').innerText = profileResult.data.Employee_ID;
-                    document.getElementById('pay-name').innerText = profileResult.data.Name || "Profile Incomplete";
-                    document.getElementById('pay-dept').innerText = profileResult.data.Department || "N/A";
-                }
-
-                // Fetch full admin payroll endpoint to filter this specific employee's salary record
-                const payrollRes = await fetch(`http://127.0.0.1:5000/api/admin/payroll`);
-                const payrollResult = await payrollRes.json();
-
-                if (payrollRes.ok && payrollResult.data) {
-                    const myRecord = payrollResult.data.find(p => String(p.Employee_ID) === String(empId));
-                    if (myRecord) {
-                        const base = parseFloat(myRecord.Base_Salary || 0);
-                        const allow = parseFloat(myRecord.Allowances || 0);
-                        const ded = parseFloat(myRecord.Deductions || 0);
-                        const net = parseFloat(myRecord.Net_Pay || (base + allow - ded));
-                        const gross = base + allow;
-
-                        document.getElementById('gross-salary').innerText = "₹" + gross.toLocaleString();
-                        document.getElementById('total-deductions').innerText = "₹" + ded.toLocaleString();
-                        document.getElementById('net-salary').innerText = "₹" + net.toLocaleString();
-
-                        document.getElementById('base-sal').innerText = "₹" + base.toLocaleString();
-                        document.getElementById('allowances').innerText = "₹" + allow.toLocaleString();
-                        document.getElementById('table-gross').innerText = "₹" + gross.toLocaleString();
-                        document.getElementById('deductions').innerText = "₹" + ded.toLocaleString();
-                        document.getElementById('table-net').innerText = "₹" + net.toLocaleString();
-                        document.getElementById('pay-period').innerText = myRecord.Pay_Period || "Current Period";
-                    }
+                if (response.ok && result.data) {
+                    document.getElementById('pay-id').innerText = result.data.Employee_ID;
+                    document.getElementById('pay-name').innerText = result.data.Name || "N/A";
+                    document.getElementById('pay-dept').innerText = result.data.Department || "N/A";
                 }
             } catch (error) { 
                 console.error("Error loading payroll info", error); 

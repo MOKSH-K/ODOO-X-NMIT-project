@@ -9,7 +9,10 @@
         body { background-color: #f5f8fc; color: #1f2937; }
         .header { height: 70px; background-color: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
         .logo { font-size: 26px; font-weight: bold; color: #1677d2; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .user-name { color: #374151; font-size: 15px; }
         .logout { border: 1px solid #d1d5db; background-color: white; padding: 9px 16px; border-radius: 7px; cursor: pointer; }
+        .logout:hover { background-color: #f3f4f6; }
         .layout { display: flex; min-height: calc(100vh - 70px); }
         .sidebar { width: 240px; background-color: #102a43; padding: 25px 15px; }
         .sidebar-title { color: #8fa8bf; font-size: 11px; font-weight: bold; padding: 0 15px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
@@ -17,19 +20,52 @@
         .sidebar a:hover { background-color: #1c3b5a; color: white; }
         .sidebar a.active { background-color: #1677d2; color: white; }
         .content { flex: 1; padding: 35px; max-width: 1200px; }
+        .page-title { margin-bottom: 25px; }
         .page-title h1 { font-size: 30px; margin-bottom: 7px; }
-        .page-title p { color: #6b7280; margin-bottom: 25px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .stat-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 25px; }
-        .stat-card small { color: #6b7280; font-size: 14px; }
-        .stat-card strong { display: block; font-size: 36px; margin-top: 10px; color: #1677d2; }
-        @media (max-width: 750px) { .layout { flex-direction: column; } .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 15px; } .stats-grid { grid-template-columns: 1fr; } }
+        .page-title p { color: #6b7280; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 25px; }
+        .stat-card { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; }
+        .stat-card small { color: #6b7280; font-size: 13px; }
+        .stat-card strong { display: block; font-size: 28px; margin-top: 8px; }
+        .stat-card .blue { color: #1677d2; }
+        .stat-card .green { color: #23733d; }
+        .stat-card .orange { color: #966514; }
+        .dashboard-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+        .card { background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 25px; }
+        .card h2 { font-size: 20px; margin-bottom: 20px; }
+        .attendance-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #edf1f5; }
+        .attendance-row:last-child { border-bottom: none; }
+        .employee { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; background-color: #e5f1ff; color: #1677d2; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
+        .employee-info strong { display: block; font-size: 14px; }
+        .employee-info small { color: #6b7280; font-size: 12px; }
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .present { background-color: #e9f8ef; color: #23733d; }
+        .absent { background-color: #fff0f0; color: #a52e2e; }
+        .leave { background-color: #fff5df; color: #966514; }
+        .leave-row { padding: 15px 0; border-bottom: 1px solid #edf1f5; }
+        .leave-row:last-child { border-bottom: none; }
+        .leave-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .leave-top strong { font-size: 14px; }
+        .leave-row p { color: #6b7280; font-size: 13px; margin-bottom: 8px; }
+        .view-link { color: #1677d2; text-decoration: none; font-size: 13px; font-weight: bold; }
+        .quick-actions { margin-top: 20px; }
+        .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .action { text-decoration: none; border: 1px solid #e5e7eb; background-color: #f8fafc; border-radius: 8px; padding: 15px; color: #374151; font-size: 13px; font-weight: 600; text-align: center; }
+        .action:hover { border-color: #1677d2; color: #1677d2; background-color: #f5f9ff; }
+        @media (max-width: 950px) { .stats { grid-template-columns: 1fr 1fr; } .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 750px) { .layout { flex-direction: column; } .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 15px; } .sidebar-title { display: none; } .sidebar a { min-width: 130px; text-align: center; } .content { padding: 20px; } }
+        @media (max-width: 550px) { .header { padding: 0 20px; } .user-name { display: none; } .stats { grid-template-columns: 1fr; } .action-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+
     <header class="header">
         <div class="logo">dayflow</div>
-        <button class="logout" onclick="logout()">Logout</button>
+        <div class="header-right">
+            <span class="user-name">HR Manager</span>
+            <button class="logout" onclick="logout()">Logout</button>
+        </div>
     </header>
 
     <div class="layout">
@@ -45,36 +81,149 @@
         <main class="content">
             <div class="page-title">
                 <h1>HR Dashboard</h1>
-                <p>Welcome back, HR Manager. Here is your organization overview.</p>
+                <p>Manage employees, attendance, leave and payroll.</p>
             </div>
 
-            <div class="stats-grid">
+            <!-- STATISTICS -->
+            <div class="stats">
                 <div class="stat-card">
-                    <small>Total Headcount</small>
-                    <strong id="total-headcount">Loading...</strong>
+                    <small>Total Employees</small>
+                    <strong class="blue" id="stat-total">--</strong>
                 </div>
                 <div class="stat-card">
-                    <small>Employees On Leave Today</small>
-                    <strong id="on-leave-count" style="color: #23733d;">Loading...</strong>
+                    <small>Present Today</small>
+                    <strong class="green" id="stat-present">--</strong>
+                </div>
+                <div class="stat-card">
+                    <small>On Leave Today</small>
+                    <strong class="orange" id="stat-leave">--</strong>
+                </div>
+                <div class="stat-card">
+                    <small>Pending Requests</small>
+                    <strong id="stat-pending">--</strong>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                
+                <!-- ATTENDANCE -->
+                <div class="card">
+                    <h2>Today's Attendance</h2>
+                    <div id="attendance-list">
+                        <p>Loading attendance data...</p>
+                    </div>
+                </div>
+
+                <!-- LEAVE REQUESTS -->
+                <div class="card">
+                    <h2>Pending Leave Requests</h2>
+                    <div id="leave-list">
+                        <p>Loading leave requests...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="card quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-grid">
+                    <a href="#" class="action">Manage Employees</a>
+                    <a href="#" class="action">View Attendance</a>
+                    <a href="#" class="action">Approve Leave</a>
+                    <a href="#" class="action">Manage Payroll</a>
+                    <a href="#" class="action">Add Employee</a>
+                    <a href="#" class="action">Attendance Report</a>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        async function loadDashboardMetrics() {
+        const empId = localStorage.getItem("employee_id");
+        if (!empId) window.location.href = "login.html";
+
+        async function loadHRDashboard() {
             try {
-                const response = await fetch("http://127.0.0.1:5000/api/admin/dashboard");
-                const result = await response.json();
-                if (response.ok && result.data) {
-                    document.getElementById("total-headcount").innerText = result.data.total_employees;
-                    document.getElementById("on-leave-count").innerText = result.data.on_leave_today;
+                // 1. Fetch Dashboard Metrics
+                const statRes = await fetch("http://127.0.0.1:5000/api/admin/dashboard");
+                const statResult = await statRes.json();
+                if (statRes.ok) {
+                    document.getElementById("stat-total").innerText = statResult.data.total_employees;
+                    document.getElementById("stat-leave").innerText = statResult.data.on_leave_today;
                 }
-            } catch (error) { console.error("Error loading metrics:", error); }
+
+                // 2. Fetch Global Attendance
+                const attRes = await fetch("http://127.0.0.1:5000/api/admin/attendance/today");
+                const attResult = await attRes.json();
+                const attList = document.getElementById("attendance-list");
+                attList.innerHTML = "";
+                let presentCount = 0;
+
+                if (attRes.ok && attResult.data.length > 0) {
+                    attResult.data.forEach(record => {
+                        if(record.Status === "Present") presentCount++;
+                        
+                        const initials = record.Name ? record.Name.substring(0,2).toUpperCase() : "EMP";
+                        
+                        // Set CSS class based on status
+                        let badgeClass = "present";
+                        if(record.Status === "Absent") badgeClass = "absent";
+                        if(record.Status === "Leave") badgeClass = "leave";
+
+                        attList.innerHTML += `
+                        <div class="attendance-row">
+                            <div class="employee">
+                                <div class="avatar">${initials}</div>
+                                <div class="employee-info">
+                                    <strong>${record.Name}</strong>
+                                    <small>Time In: ${record.Check_In_Time || '--'}</small>
+                                </div>
+                            </div>
+                            <span class="badge ${badgeClass}">${record.Status}</span>
+                        </div>`;
+                    });
+                } else {
+                    attList.innerHTML = "<p>No attendance records for today.</p>";
+                }
+                document.getElementById("stat-present").innerText = presentCount;
+
+                // 3. Fetch Pending Leaves
+                const leaveRes = await fetch("http://127.0.0.1:5000/api/admin/leave/pending");
+                const leaveResult = await leaveRes.json();
+                const leaveList = document.getElementById("leave-list");
+                leaveList.innerHTML = "";
+                
+                if (leaveRes.ok && leaveResult.data.length > 0) {
+                    document.getElementById("stat-pending").innerText = leaveResult.data.length;
+                    
+                    leaveResult.data.forEach(req => {
+                        leaveList.innerHTML += `
+                        <div class="leave-row">
+                            <div class="leave-top">
+                                <strong>${req.Name}</strong>
+                                <span class="badge leave">Pending</span>
+                            </div>
+                            <p>${req.Leave_Type} • ${new Date(req.Start_Date).toLocaleDateString()} to ${new Date(req.End_Date).toLocaleDateString()}</p>
+                            <a href="#" class="view-link">Review Request →</a>
+                        </div>`;
+                    });
+                } else {
+                    document.getElementById("stat-pending").innerText = "0";
+                    leaveList.innerHTML = "<p>No pending requests!</p>";
+                }
+
+            } catch (error) {
+                console.error("Error loading HR dashboard:", error);
+            }
         }
 
-        function logout() { localStorage.clear(); window.location.href = "login.html"; }
-        loadDashboardMetrics();
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        // Initialize dashboard
+        loadHRDashboard();
     </script>
 </body>
 </html>
