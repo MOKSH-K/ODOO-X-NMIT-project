@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dayflow - Payroll Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f8fc;
+            color: #1f2937;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            height: 70px;
+            background-color: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 40px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #1677d2;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            color: #374151;
+            font-size: 15px;
+        }
+
+        .logout {
+            border: 1px solid #d1d5db;
+            background-color: white;
+            padding: 9px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* ================= LAYOUT ================= */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 240px;
+            background-color: #102a43;
+            padding: 25px 15px;
+        }
+
+        .sidebar-title {
+            color: #8fa8bf;
+            font-size: 11px;
+            font-weight: bold;
+
+            padding: 0 15px;
+            margin-bottom: 12px;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #cbd5e1;
+
+            padding: 13px 15px;
+            margin-bottom: 5px;
+
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background-color: #1c3b5a;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background-color: #1677d2;
+            color: white;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            flex: 1;
+            padding: 35px;
+            max-width: 1250px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        /* ================= SUMMARY ================= */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .summary-card small {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .summary-card strong {
+            display: block;
+            font-size: 25px;
+            margin-top: 8px;
+        }
+
+        .blue {
+            color: #1677d2;
+        }
+
+        .green {
+            color: #23733d;
+        }
+
+        .orange {
+            color: #966514;
+        }
+
+        /* ================= FILTER ================= */
+
+        .filter-card {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid #d9e1eb;
+            border-radius: 7px;
+
+            background-color: white;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #1677d2;
+            box-shadow: 0 0 0 3px #1677d21a;
+        }
+
+        /* ================= PAYROLL CARD ================= */
+
+        .payroll-card {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .payroll-card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th,
+        td {
+            text-align: left;
+
+            padding: 15px 12px;
+
+            border-bottom: 1px solid #edf1f5;
+
+            font-size: 14px;
+        }
+
+        th {
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* ================= EMPLOYEE ================= */
+
+        .employee {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background-color: #e5f1ff;
+            color: #1677d2;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+            font-size: 12px;
+
+            flex-shrink: 0;
+        }
+
+        .employee-name {
+            font-weight: 600;
+        }
+
+        .employee-id {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        /* ================= SALARY ================= */
+
+        .salary {
+            font-weight: 600;
+        }
+
+        .net-salary {
+            color: #23733d;
+            font-weight: bold;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .processed {
+            background-color: #e9f8ef;
+            color: #23733d;
+        }
+
+        .pending {
+            background-color: #fff5df;
+            color: #966514;
+        }
+
+        /* ================= ACTION ================= */
+
+        .view-button {
+            border: 1px solid #d9e1eb;
+
+            background-color: white;
+
+            padding: 7px 12px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+        }
+
+        .view-button:hover {
+            border-color: #1677d2;
+            color: #1677d2;
+            background-color: #f5f9ff;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+
+                display: flex;
+
+                overflow-x: auto;
+
+                padding: 15px;
+            }
+
+            .sidebar-title {
+                display: none;
+            }
+
+            .sidebar a {
+                min-width: 130px;
+                text-align: center;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .header {
+                padding: 0 20px;
+            }
+
+            .user-name {
+                display: none;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div class="logo">
+            dayflow
+        </div>
+
+        <div class="header-right">
+
+            <span class="user-name">
+                HR Manager
+            </span>
+
+            <button
+                class="logout"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= LAYOUT ================= -->
+
+    <div class="layout">
+
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                HR Management
+            </div>
+
+            <a href="hr_home.html">
+                Dashboard
+            </a>
+
+            <a href="employees.html">
+                Employees
+            </a>
+
+            <a href="attendance_management.html">
+                Attendance
+            </a>
+
+            <a href="leave_approvals.html">
+                Leave Requests
+            </a>
+
+            <a
+                href="payroll_management.html"
+                class="active"
+            >
+                Payroll
+            </a>
+
+        </aside>
+
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <main class="content">
+
+
+            <div class="page-title">
+
+                <h1>
+                    Payroll Management
+                </h1>
+
+                <p>
+                    Manage employee salaries and payroll records.
+                </p>
+
+            </div>
+
+
+
+            <!-- ================= SUMMARY ================= -->
+
+            <div class="summary">
+
+
+                <div class="summary-card">
+
+                    <small>
+                        Total Employees
+                    </small>
+
+                    <strong class="blue">
+                        128
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <small>
+                        Monthly Payroll
+                    </small>
+
+                    <strong class="green">
+                        ₹42,85,000
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <small>
+                        Pending Payroll
+                    </small>
+
+                    <strong class="orange">
+                        7
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================= FILTER ================= -->
+
+            <div class="filter-card">
+
+                <div class="filters">
+
+
+                    <div class="filter-group">
+
+                        <label>
+                            Search Employee
+                        </label>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search by name or ID..."
+                            onkeyup="filterPayroll()"
+                        >
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label>
+                            Department
+                        </label>
+
+                        <select
+                            id="departmentFilter"
+                            onchange="filterPayroll()"
+                        >
+
+                            <option value="all">
+                                All Departments
+                            </option>
+
+                            <option value="engineering">
+                                Engineering
+                            </option>
+
+                            <option value="design">
+                                Design
+                            </option>
+
+                            <option value="hr">
+                                Human Resources
+                            </option>
+
+                            <option value="marketing">
+                                Marketing
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label>
+                            Payroll Status
+                        </label>
+
+                        <select
+                            id="statusFilter"
+                            onchange="filterPayroll()"
+                        >
+
+                            <option value="all">
+                                All Status
+                            </option>
+
+                            <option value="processed">
+                                Processed
+                            </option>
+
+                            <option value="pending">
+                                Pending
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= PAYROLL TABLE ================= -->
+
+            <div class="payroll-card">
+
+                <h2>
+                    Employee Payroll
+                </h2>
+
+
+                <div class="table-container">
+
+                    <table id="payrollTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Employee
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Basic Salary
+                                </th>
+
+                                <th>
+                                    Allowances
+                                </th>
+
+                                <th>
+                                    Deductions
+                                </th>
+
+                                <th>
+                                    Net Salary
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <!-- EMPLOYEE 1 -->
+
+                            <tr
+                                data-department="engineering"
+                                data-status="processed"
+                            >
+
+                                <td>
+
+                                    <div class="employee">
+
+                                        <div class="avatar">
+                                            AS
+                                        </div>
+
+                                        <div>
+
+                                            <div class="employee-name">
+                                                Arun Sharma
+                                            </div>
+
+                                            <div class="employee-id">
+                                                DF1001
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Engineering
+                                </td>
+
+                                <td class="salary">
+                                    ₹55,000
+                                </td>
+
+                                <td>
+                                    ₹8,000
+                                </td>
+
+                                <td>
+                                    ₹4,500
+                                </td>
+
+                                <td class="net-salary">
+                                    ₹58,500
+                                </td>
+
+                                <td>
+
+                                    <span class="status processed">
+                                        Processed
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button
+                                        class="view-button"
+                                        onclick="viewPayroll('DF1001')"
+                                    >
+                                        View
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- EMPLOYEE 2 -->
+
+                            <tr
+                                data-department="design"
+                                data-status="processed"
+                            >
+
+                                <td>
+
+                                    <div class="employee">
+
+                                        <div class="avatar">
+                                            RK
+                                        </div>
+
+                                        <div>
+
+                                            <div class="employee-name">
+                                                Riya Kumar
+                                            </div>
+
+                                            <div class="employee-id">
+                                                DF1002
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Design
+                                </td>
+
+                                <td class="salary">
+                                    ₹48,000
+                                </td>
+
+                                <td>
+                                    ₹7,000
+                                </td>
+
+                                <td>
+                                    ₹3,800
+                                </td>
+
+                                <td class="net-salary">
+                                    ₹51,200
+                                </td>
+
+                                <td>
+
+                                    <span class="status processed">
+                                        Processed
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button
+                                        class="view-button"
+                                        onclick="viewPayroll('DF1002')"
+                                    >
+                                        View
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- EMPLOYEE 3 -->
+
+                            <tr
+                                data-department="engineering"
+                                data-status="pending"
+                            >
+
+                                <td>
+
+                                    <div class="employee">
+
+                                        <div class="avatar">
+                                            VP
+                                        </div>
+
+                                        <div>
+
+                                            <div class="employee-name">
+                                                Vikram Patel
+                                            </div>
+
+                                            <div class="employee-id">
+                                                DF1003
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Engineering
+                                </td>
+
+                                <td class="salary">
+                                    ₹62,000
+                                </td>
+
+                                <td>
+                                    ₹9,000
+                                </td>
+
+                                <td>
+                                    ₹5,000
+                                </td>
+
+                                <td class="net-salary">
+                                    ₹66,000
+                                </td>
+
+                                <td>
+
+                                    <span class="status pending">
+                                        Pending
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button
+                                        class="view-button"
+                                        onclick="viewPayroll('DF1003')"
+                                    >
+                                        View
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- EMPLOYEE 4 -->
+
+                            <tr
+                                data-department="hr"
+                                data-status="processed"
+                            >
+
+                                <td>
+
+                                    <div class="employee">
+
+                                        <div class="avatar">
+                                            NS
+                                        </div>
+
+                                        <div>
+
+                                            <div class="employee-name">
+                                                Neha Singh
+                                            </div>
+
+                                            <div class="employee-id">
+                                                DF1004
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Human Resources
+                                </td>
+
+                                <td class="salary">
+                                    ₹45,000
+                                </td>
+
+                                <td>
+                                    ₹6,000
+                                </td>
+
+                                <td>
+                                    ₹3,200
+                                </td>
+
+                                <td class="net-salary">
+                                    ₹47,800
+                                </td>
+
+                                <td>
+
+                                    <span class="status processed">
+                                        Processed
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button
+                                        class="view-button"
+                                        onclick="viewPayroll('DF1004')"
+                                    >
+                                        View
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- EMPLOYEE 5 -->
+
+                            <tr
+                                data-department="marketing"
+                                data-status="pending"
+                            >
+
+                                <td>
+
+                                    <div class="employee">
+
+                                        <div class="avatar">
+                                            AV
+                                        </div>
+
+                                        <div>
+
+                                            <div class="employee-name">
+                                                Ananya Verma
+                                            </div>
+
+                                            <div class="employee-id">
+                                                DF1005
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Marketing
+                                </td>
+
+                                <td class="salary">
+                                    ₹42,000
+                                </td>
+
+                                <td>
+                                    ₹5,500
+                                </td>
+
+                                <td>
+                                    ₹3,000
+                                </td>
+
+                                <td class="net-salary">
+                                    ₹44,500
+                                </td>
+
+                                <td>
+
+                                    <span class="status pending">
+                                        Pending
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button
+                                        class="view-button"
+                                        onclick="viewPayroll('DF1005')"
+                                    >
+                                        View
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        function filterPayroll() {
+
+            const search =
+                document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase();
+
+            const department =
+                document
+                .getElementById("departmentFilter")
+                .value;
+
+            const status =
+                document
+                .getElementById("statusFilter")
+                .value;
+
+
+            const rows =
+                document.querySelectorAll(
+                    "#payrollTable tbody tr"
+                );
+
+
+            rows.forEach(function(row) {
+
+                const text =
+                    row.textContent.toLowerCase();
+
+                const rowDepartment =
+                    row.getAttribute(
+                        "data-department"
+                    );
+
+                const rowStatus =
+                    row.getAttribute(
+                        "data-status"
+                    );
+
+
+                const matchesSearch =
+                    text.includes(search);
+
+                const matchesDepartment =
+                    department === "all" ||
+                    rowDepartment === department;
+
+                const matchesStatus =
+                    status === "all" ||
+                    rowStatus === status;
+
+
+                if (
+                    matchesSearch &&
+                    matchesDepartment &&
+                    matchesStatus
+                ) {
+
+                    row.style.display = "";
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        function viewPayroll(id) {
+
+            alert(
+                "Payroll details for employee " + id +
+                " will be connected to the backend later."
+            );
+
+        }
+
+
+        function logout() {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
