@@ -9,8 +9,8 @@ def createtable(_host,_user,_password,_database,table_name:str,table_structure:d
     for col_name,data_type in table_structure.items():
         column_def.append(f"{col_name} {data_type}")
         columns_str=','.join(column_def)
-        query=f"CREATE TABLE IF NOT EXISTS {table_name} ({columns_str}) "
-        cursor.execute(query)
+    query=f"CREATE TABLE IF NOT EXISTS {table_name} ({columns_str}) "
+    cursor.execute(query)
     cursor.close()
     connection.close()
     print(f"The table {table_name} has been created in database {_database}")
