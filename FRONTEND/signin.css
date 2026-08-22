@@ -1,0 +1,26 @@
+
+.signin{
+    padding-left: 200px;
+    text-align: left;
+}
+.p1{
+    background: linear-gradient(135deg, #172554, #2563eb);
+    color: white;
+}
+.logo{
+    font-size: 30px;
+}
+.flow{
+    color:cadetblue;
+    font-size: 30px;
+}
+.table{
+    padding-left: 50px;
+}
+.work{
+    padding-top: 50px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+.webname{
+    
+}

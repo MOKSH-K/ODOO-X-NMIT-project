@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dayflow | Login</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f5f7fb;
+      color: #182230;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .page {
+      width: min(1100px, 100%);
+      min-height: 650px;
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 0 20px 60px rgba(20, 35, 60, 0.12);
+    }
+
+    .brand-panel {
+      background: linear-gradient(145deg, #172554, #1e3a8a);
+      color: white;
+      padding: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::before,
+    .brand-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .brand-panel::before {
+      width: 320px;
+      height: 320px;
+      right: -130px;
+      top: -110px;
+    }
+
+    .brand-panel::after {
+      width: 240px;
+      height: 240px;
+      left: -110px;
+      bottom: -90px;
+    }
+
+    .logo {
+      position: relative;
+      z-index: 1;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #93c5fd;
+    }
+
+    .brand-content {
+      position: relative;
+      z-index: 1;
+      max-width: 430px;
+    }
+
+    .brand-content h1 {
+      font-size: clamp(38px, 4vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+    }
+
+    .brand-content p {
+      color: #dbeafe;
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 390px;
+    }
+
+    .feature-list {
+      position: relative;
+      z-index: 1;
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #e0ecff;
+      font-size: 14px;
+    }
+
+    .check {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.12);
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+    }
+
+    .form-panel {
+      padding: 55px clamp(30px, 5vw, 70px);
+      display: flex;
+      align-items: center;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 420px;
+      margin: auto;
+    }
+
+    .form-heading h2 {
+      font-size: 32px;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .form-heading p {
+      color: #667085;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f2f4f7;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      padding: 11px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #667085;
+      transition: 0.2s;
+    }
+
+    .tab.active {
+      background: white;
+      color: #1d4ed8;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      margin-bottom: 8px;
+      color: #344054;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #d0d5dd;
+      border-radius: 11px;
+      padding: 0 14px;
+      outline: none;
+      background: white;
+      color: #182230;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.09);
+    }
+
+    .password-row {
+      position: relative;
+    }
+
+    .password-row input {
+      padding-right: 65px;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      color: #2563eb;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 5px 0 22px;
+      font-size: 12px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #667085;
+    }
+
+    .remember input {
+      width: 15px;
+      height: 15px;
+      accent-color: #2563eb;
+    }
+
+    .forgot {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .main-btn {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 11px;
+      background: #2563eb;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .main-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .main-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 13px;
+      border-radius: 9px;
+      font-size: 12px;
+    }
+
+    .message.success {
+      display: block;
+      background: #ecfdf3;
+      color: #027a48;
+    }
+
+    .message.error {
+      display: block;
+      background: #fef3f2;
+      color: #b42318;
+    }
+
+    .terms {
+      color: #98a2b3;
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-panel {
+        min-height: 360px;
+        padding: 35px;
+      }
+
+      .brand-content h1 {
+        font-size: 40px;
+      }
+
+      .feature-list {
+        display: none;
+      }
+
+      .form-panel {
+        padding: 40px 28px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      body {
+        padding: 10px;
+      }
+
+      .page {
+        border-radius: 20px;
+      }
+
+      .brand-panel {
+        min-height: 300px;
+        padding: 28px;
+      }
+
+      .form-panel {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page">
+
+    <section class="brand-panel">
+      <div class="logo">day<span>flow</span></div>
+
+      <div class="brand-content">
+        <h1>Every workday,<br>perfectly aligned.</h1>
+        <p>
+          A simple workspace for employees and HR teams to manage
+          profiles, attendance, leave and payroll in one place.
+        </p>
+      </div>
+
+      <ul class="feature-list">
+        <li><span class="check">✓</span> Smart employee management</li>
+        <li><span class="check">✓</span> Simple attendance tracking</li>
+        <li><span class="check">✓</span> Easy leave approvals</li>
+      </ul>
+    </section>
+
+    <section class="form-panel">
+      <div class="form-container">
+
+        <div class="form-heading">
+          <h2 id="formTitle">Welcome back</h2>
+          <p id="formSubtitle">Sign in to continue to your Dayflow workspace.</p>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" id="loginTab" onclick="showForm('login')" >
+            Sign In
+          </button>
+          <button class="tab" id="signupTab" onclick="showForm('signup')">
+            Sign Up
+          </button>
+        </div>
+
+        <form class="form active" id="loginForm" onsubmit="handleLogin(event)">
+          <div class="field">
+            <label for="loginEmail">Email address</label>
+            <input type="email" id="loginEmail" placeholder="you@company.com" required>
+          </div>
+
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <div class="password-row">
+              <input type="password" id="loginPassword" placeholder="Enter your password" required>
+              <button type="button" class="show-password"
+                onclick="togglePassword('loginPassword', this)">Show</button>
+            </div>
+          </div>
+
+          <div class="options">
+            <label class="remember">
+              <input type="checkbox">
+              Remember me
+            </label>
+
+            <a href="#" class="forgot" onclick="return false;">
+              Forgot password?
+            </a>
+          </div>
+
+          <a href="homepage.html">
+            <button class="main-btn" id="loginButton" type="submit">Sign In</button>
+          </a>
+
+          <div class="message" id="loginMessage"></div>
+        </form>
+
+        <form class="form" id="signupForm" onsubmit="handleSignup(event)">
+          <div class="field">
+            <label for="employeeId">Employee ID</label>
+            <input type="text" id="employeeId" placeholder="e.g. EMP001" required>
+          </div>
+
+          <div class="field">
+            <label for="signupEmail">Email address</label>
+            <input type="email" id="signupEmail" placeholder="you@company.com" required>
+          </div>
+
+          <div class="field">
+            <label for="role">Role</label>
+            <select id="role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="employee">Employee</option>
+              <option value="hr">HR / Admin</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="signupPassword">Password</label>
+            <div class="password-row">
+              <input type="password" id="signupPassword"
+                placeholder="Create a password" minlength="8" required>
+              <button type="button" class="show-password"
+                onclick="togglePassword('signupPassword', this)">Show</button>
+            </div>
+          </div>
+
+          <button class="main-btn" id="signupButton" type="submit">
+            Create Account
+          </button>
+
+          <div class="message" id="signupMessage"></div>
+
+          <p class="terms">
+            By creating an account, you agree to the Dayflow terms and
+            acknowledge the account verification process.
+          </p>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function showForm(type) {
+      const loginForm = document.getElementById("loginForm");
+      const signupForm = document.getElementById("signupForm");
+      const loginTab = document.getElementById("loginTab");
+      const signupTab = document.getElementById("signupTab");
+      const title = document.getElementById("formTitle");
+      const subtitle = document.getElementById("formSubtitle");
+
+      clearMessage("loginMessage");
+      clearMessage("signupMessage");
+
+      if (type === "login") {
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+
+        title.textContent = "Welcome back";
+        subtitle.textContent =
+          "Sign in to continue to your Dayflow workspace.";
+      } else {
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
+
+        title.textContent = "Create your account";
+        subtitle.textContent =
+          "Set up your Dayflow account to get started.";
+      }
+    }
+
+    function togglePassword(inputId, button) {
+      const input = document.getElementById(inputId);
+
+      if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "Hide";
+      } else {
+        input.type = "password";
+        button.textContent = "Show";
+      }
+    }
+
+    function showMessage(elementId, text, type) {
+      const element = document.getElementById(elementId);
+      element.textContent = text;
+      element.className = "message " + type;
+    }
+
+    function clearMessage(elementId) {
+      const element = document.getElementById(elementId);
+      element.textContent = "";
+      element.className = "message";
+    }
+
+    async function handleSignup(event) {
+      event.preventDefault();
+
+      const button = document.getElementById("signupButton");
+      button.disabled = true;
+      button.textContent = "Creating account...";
+
+      const data = {
+        employee_id: document.getElementById("employeeId").value,
+        email: document.getElementById("signupEmail").value,
+        role: document.getElementById("role").value,
+        password: document.getElementById("signupPassword").value
+      };
+
+      try {
+        const response = await fetch("/api/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage("signupMessage", result.message, "success");
+          document.getElementById("signupForm").reset();
+
+          setTimeout(() => {
+            showForm("login");
+            document.getElementById("loginEmail").value = data.email;
+          }, 1000);
+        } else {
+          showMessage("signupMessage", result.message, "error");
+        }
+      } catch (error) {
+        showMessage(
+          "signupMessage",
+          "Could not connect to the Dayflow server.",
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Create Account";
+      }
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const button = document.getElementById("loginButton");
+      button.disabled = true;
+      button.textContent = "Signing in...";
+
+      const data = {
+        email: document.getElementById("loginEmail").value,
+        password: document.getElementById("loginPassword").value
+      };
+
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage(
+            "loginMessage",
+            `Welcome! Logged in as ${result.user.role === "hr" ? "HR / Admin" : "Employee"}.`,
+            "success"
+          );
+
+          // Dashboard will be connected here later.
+          console.log("Logged-in user:", result.user);
+        } else {
+          showMessage("loginMessage", result.message, "error");
+        }
+      } catch (error) {
+        showMessage(
+          "loginMessage",
+          "Could not connect to the Dayflow server.",
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Sign In";
+      }
+    }
+  </script>
+
+</body>
+</html>
