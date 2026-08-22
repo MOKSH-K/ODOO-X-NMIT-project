@@ -1,69 +1,90 @@
 import mysql.connector
-import sqlfunc
-host='localhost'
-user='root'
-password='moksh@1903'#replace with your password
-database='dayflow_hrms'
-# 1. User and Authentication
-table_name1='UserAndAuth'
-schema1={"Employee_ID":"INT PRIMARY KEY",
-"Email":"VARCHAR(100) UNIQUE NOT NULL",
-"password_hash":"VARCHAR(255) NOT NULL",
-"UserRole":"VARCHAR(255) DEFAULT 'Employee'",
-"email_ver":"BOOLEAN DEFAULT FALSE"}
-sqlfunc.createtable(host,user,password,database,table_name1,schema1)
-# 2. Employee Profile
-table_name2="EMPprof"
-schema2={"Employee_ID":"INT",
-         "Name":"VARCHAR(100) NOT NULL",
-         "Phone_no":"INT",
-         "Address":"TEXT",
-         "Profile_pic_url":"VARCHAR(255)",
-         "Department":"VARCHAR(50)",
-         "Designation":"VARCHAR(50)",
-         "Manager_id":"INT",
-         "Doc_Links":"TEXT",
-         "DOJ":"DATE"}
-sqlfunc.createtable(host,user,password,database,table_name2,schema2)
-# 3. Attendance Table
-table_name3 = "Attendance"
-schema3 = {
-    "Attendance_ID": "INT AUTO_INCREMENT PRIMARY KEY",
-    "Employee_ID": "INT",
-    "Log_Date": "DATE",
-    "Check_In_Time": "DATETIME",
-    "Check_Out_Time": "DATETIME",
-    "Status": "VARCHAR(20)",
-    "FOREIGN KEY (Employee_ID)": "REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE"
-}
-sqlfunc.createtable(host, user, password, database, table_name3, schema3)
-# 4. Leave Requests Table
-table_name4 = "LeaveRequests"
-schema4 = {
-    "Leave_ID": "INT AUTO_INCREMENT PRIMARY KEY",
-    "Employee_ID": "INT",
-    "Leave_Type": "VARCHAR(20)",
-    "Start_Date": "DATE",
-    "End_Date": "DATE",
-    "Remarks": "TEXT",
-    "Status": "VARCHAR(20) DEFAULT 'Pending'",
-    "Admin_Comments": "TEXT",
-    "Approver_ID": "INT",
-    "FOREIGN KEY (Employee_ID)": "REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE"
-}
-sqlfunc.createtable(host, user, password, database, table_name4, schema4)
-# 5. Payroll Table
-table_name5 = "Payroll"
-schema5 = {
-    "Payroll_ID": "INT AUTO_INCREMENT PRIMARY KEY",
-    "Employee_ID": "INT",
-    "Base_Salary": "DECIMAL(10, 2)",
-    "Allowances": "DECIMAL(10, 2)",
-    "Deductions": "DECIMAL(10, 2)",
-    "Net_Pay": "DECIMAL(10, 2)",
-    "Pay_Period": "DATE",
-    "FOREIGN KEY (Employee_ID)": "REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE"
-}
-sqlfunc.createtable(host, user, password, database, table_name5, schema5)
 
-    
+def create_tables():
+    try:
+        connection = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            password='Hussain13620_root',
+            database='dayflow_hrms'
+        )
+        cursor = connection.cursor()
+
+        # 1. User Authentication Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS UserAndAuth (
+                Employee_ID INT PRIMARY KEY,
+                Email VARCHAR(100) UNIQUE NOT NULL,
+                UserRole VARCHAR(50) NOT NULL,
+                password_hash VARCHAR(255) NOT NULL,
+                email_ver BOOLEAN DEFAULT FALSE
+            )
+        """)
+
+        # 2. Employee Profile Table (Manager_ID and Document_Links removed)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS EMPprof (
+                Employee_ID INT PRIMARY KEY,
+                Name VARCHAR(100) NOT NULL,
+                Department VARCHAR(100),
+                Designation VARCHAR(100),
+                Phone_no BIGINT,
+                DOJ DATE,
+                FOREIGN KEY (Employee_ID) REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE
+            )
+        """)
+
+        # 3. Attendance Logs Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS AttendanceLogs (
+                Log_ID INT AUTO_INCREMENT PRIMARY KEY,
+                Employee_ID INT,
+                Log_Date DATE NOT NULL,
+                Check_In_Time TIME,
+                Check_Out_Time TIME,
+                Status VARCHAR(50) NOT NULL,
+                FOREIGN KEY (Employee_ID) REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE
+            )
+        """)
+
+        # 4. Leave Requests Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS LeaveRequests (
+                Request_ID INT AUTO_INCREMENT PRIMARY KEY,
+                Employee_ID INT,
+                Leave_Type VARCHAR(50) NOT NULL,
+                Start_Date DATE NOT NULL,
+                End_Date DATE NOT NULL,
+                Remarks TEXT,
+                Status VARCHAR(50) DEFAULT 'Pending',
+                FOREIGN KEY (Employee_ID) REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE
+            )
+        """)
+
+        # 5. Payroll Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS Payroll (
+                Payroll_ID INT AUTO_INCREMENT PRIMARY KEY,
+                Employee_ID INT,
+                Base_Salary DECIMAL(10, 2) NOT NULL,
+                Allowances DECIMAL(10, 2) DEFAULT 0.00,
+                Deductions DECIMAL(10, 2) DEFAULT 0.00,
+                Net_Pay DECIMAL(10, 2) NOT NULL,
+                Pay_Period VARCHAR(50) NOT NULL,
+                FOREIGN KEY (Employee_ID) REFERENCES UserAndAuth(Employee_ID) ON DELETE CASCADE
+            )
+        """)
+
+        connection.commit()
+        print("All database tables created successfully!")
+
+    except Exception as e:
+        print(f"Error creating tables: {e}")
+    finally:
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+
+if __name__ == '__main__':
+    create_tables()

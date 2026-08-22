@@ -1,187 +1,186 @@
-import sqlfunc
+import mysql.connector
 
-# Database credentials
-host = 'localhost'
-user = 'root'
-password = 'Hussain13620_root' #replace with your password
-database = 'dayflow_hrms'
+# Database credentials configuration (adjust if needed)
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'Hussain13620_root',
+    'database': 'dayflow_hrms'
+}
+
+def get_db_connection():
+    try:
+        connection = mysql.connector.connect(**DB_CONFIG)
+        return connection
+    except mysql.connector.Error as err:
+        print(f"Database connection error: {err}")
+        return None
 
 # ==========================================
-# 1. AUTHENTICATION (Login)
+# 1. AUTHENTICATION
 # ==========================================
-
-'''When a user tries to log in, they provide an email. This query goes into the users table,
-   finds that exact email, and hands back the user's ID, their encrypted password (password_hash),
-   and their role (Admin vs. Employee)'''
-
 def verify_login(email):
-    connection = sqlfunc.get_db_connection(host, user, password, database)
-    cursor = connection.cursor(dictionary=True) 
-    
-    query = "SELECT Employee_ID, password_hash, UserRole FROM UserAndAuth WHERE Email = %s"
-    cursor.execute(query, (email,))
-    user_data = cursor.fetchone() 
-    
-    cursor.close()
-    connection.close()
-    return user_data
-
+    connection = get_db_connection()
+    if not connection:
+        return None
+    cursor = connection.cursor(dictionary=True)
+    try:
+        query = "SELECT Employee_ID, Email, UserRole FROM UserAndAuth WHERE Email = %s"
+        cursor.execute(query, (email,))
+        user = cursor.fetchone()
+        return user
+    except Exception as e:
+        print(f"Error verifying login: {e}")
+        return None
+    finally:
+        cursor.close()
+        connection.close()
 
 # ==========================================
-# 2. EMPLOYEE PROFILES
+# 2. EMPLOYEE PROFILE
 # ==========================================
-
-'''The * symbol means "select everything." It fetches every single column (name, department, role, etc.)
-   for one specific employee. This is what populates the "My Profile" page on the frontend'''
-
 def get_employee_profile(employee_id):
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return None
     cursor = connection.cursor(dictionary=True)
-    
-    query = "SELECT * FROM EMPprof WHERE Employee_ID = %s"
-    cursor.execute(query, (employee_id,))
-    profile_data = cursor.fetchone()
-    
-    cursor.close()
-    connection.close()
-    return profile_data
-
+    try:
+        query = """
+            SELECT p.Employee_ID, p.Name, p.Department, p.Designation, p.Phone_no, p.DOJ, u.Email 
+            FROM EMPprof p
+            LEFT JOIN UserAndAuth u ON p.Employee_ID = u.Employee_ID
+            WHERE p.Employee_ID = %s
+        """
+        cursor.execute(query, (employee_id,))
+        profile = cursor.fetchone()
+        return profile
+    except Exception as e:
+        print(f"Error fetching profile: {e}")
+        return None
+    finally:
+        cursor.close()
+        connection.close()
 
 # ==========================================
-# 3. ATTENDANCE MANAGEMENT
+# 3. ATTENDANCE
 # ==========================================
-
-# Grabs the punch-in/punch-out history for a specific person
 def get_employee_attendance(employee_id):
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return []
     cursor = connection.cursor(dictionary=True)
-    
-    query = """
-        SELECT Log_Date, Check_In_Time, Check_Out_Time, Status 
-        FROM Attendance 
-        WHERE Employee_ID = %s 
-        ORDER BY Log_Date DESC
-    """
-    cursor.execute(query, (employee_id,))
-    attendance_history = cursor.fetchall()
-    
-    cursor.close()
-    connection.close()
-    return attendance_history
-
-
-'''This is for the HR dashboard. The attendance table only stores the employee_id, which isn't helpful for a human reading it.
-   The JOIN acts like a bridge, connecting the attendance record to the employees table
-   so HR can see the actual full_name of everyone who clocked in'''
+    try:
+        query = "SELECT Log_Date, Check_In_Time, Check_Out_Time, Status FROM AttendanceLogs WHERE Employee_ID = %s ORDER BY Log_Date DESC"
+        cursor.execute(query, (employee_id,))
+        return cursor.fetchall()
+    except Exception as e:
+        print(f"Error fetching attendance: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
 
 def get_todays_global_attendance():
-    """ADMIN VIEW: Fetches today's attendance for all employees with their names."""
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return []
     cursor = connection.cursor(dictionary=True)
-    
-    query = """
-        SELECT e.Name, a.Log_Date, a.Check_In_Time, a.Check_Out_Time, a.Status 
-        FROM Attendance a 
-        JOIN EMPprof e ON a.Employee_ID = e.Employee_ID 
-        WHERE a.Log_Date = CURDATE()
-    """
-    cursor.execute(query)
-    global_attendance = cursor.fetchall()
-    
-    cursor.close()
-    connection.close()
-    return global_attendance
-
+    try:
+        # Fetches attendance for today joined with employee names
+        query = """
+            SELECT a.Employee_ID, p.Name, a.Check_In_Time, a.Check_Out_Time, a.Status, a.Log_Date
+            FROM AttendanceLogs a
+            LEFT JOIN EMPprof p ON a.Employee_ID = p.Employee_ID
+            WHERE a.Log_Date = CURDATE()
+        """
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print(f"Error fetching global attendance: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
 
 # ==========================================
 # 4. LEAVE MANAGEMENT
 # ==========================================
-
-#Fetches all past and present vacation/sick leave requests for an employee, newest ones first
-
 def get_employee_leave_history(employee_id):
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return []
     cursor = connection.cursor(dictionary=True)
-    
-    query = """
-        SELECT Leave_ID, Leave_Type, Start_Date, End_Date, Status, Remarks 
-        FROM LeaveRequests 
-        WHERE Employee_ID = %s 
-    """
-    cursor.execute(query, (employee_id,))
-    leave_history = cursor.fetchall()
-    
-    cursor.close()
-    connection.close()
-    return leave_history
-
-
-'''Another bridge (JOIN). HR needs an inbox of vacation requests to approve or deny.
-   This grabs only the leaves marked as 'Pending' and attaches the employee's real name
-   so HR knows who is asking for time off'''
+    try:
+        query = "SELECT Leave_Type, Start_Date, End_Date, Remarks, Status FROM LeaveRequests WHERE Employee_ID = %s"
+        cursor.execute(query, (employee_id,))
+        return cursor.fetchall()
+    except Exception as e:
+        print(f"Error fetching leave history: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
 
 def get_pending_leave_approvals():
-    """ADMIN VIEW: Fetches all pending leaves and attaches the employee's name."""
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return []
     cursor = connection.cursor(dictionary=True)
-    
-    query = """
-        SELECT l.Leave_ID, e.Name, e.Employee_ID, l.Leave_Type, l.Start_Date, l.End_Date, l.Remarks 
-        FROM LeaveRequests l 
-        JOIN EMPprof e ON l.Employee_ID = e.Employee_ID 
-        WHERE l.Status = 'Pending'
-    """
-    cursor.execute(query)
-    pending_leaves = cursor.fetchall()
-    
-    cursor.close()
-    connection.close()
-    return pending_leaves
-
+    try:
+        query = """
+            SELECT l.Request_ID, l.Employee_ID, p.Name, l.Leave_Type, l.Start_Date, l.End_Date, l.Remarks, l.Status
+            FROM LeaveRequests l
+            LEFT JOIN EMPprof p ON l.Employee_ID = p.Employee_ID
+            WHERE l.Status = 'Pending'
+        """
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print(f"Error fetching pending leaves: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
 
 # ==========================================
 # 5. ADMIN DASHBOARD METRICS
 # ==========================================
-
-# counts the number of rows in the table. Instead of downloading all 500 employee profiles to count them
-
 def get_total_employee_count():
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return {"total_employees": 0}
     cursor = connection.cursor(dictionary=True)
-    
-    query = "SELECT COUNT(*) AS total_employees FROM EMPprof"
-    cursor.execute(query)
-    total = cursor.fetchone()
-    
-    cursor.close()
-    connection.close()
-    return total
-
-
-'''This tells HR exactly who is out of the office right now. It checks two things: first,
-   that HR actually approved the leave,and second,
-   that today's exact date (CURDATE()) falls somewhere BETWEEN the employee's start and end dates'''
+    try:
+        cursor.execute("SELECT COUNT(*) AS total_employees FROM UserAndAuth")
+        return cursor.fetchone()
+    except Exception as e:
+        print(f"Error counting employees: {e}")
+        return {"total_employees": 0}
+    finally:
+        cursor.close()
+        connection.close()
 
 def get_active_on_leave_count():
-    connection = sqlfunc.get_db_connection(host, user, password, database)
+    connection = get_db_connection()
+    if not connection:
+        return {"on_leave_today": 0}
     cursor = connection.cursor(dictionary=True)
-    
-    query = """
-        SELECT COUNT(*) AS on_leave_today 
-        FROM LeaveRequests 
-        WHERE Status = 'Approved' AND CURDATE() BETWEEN Start_Date AND End_Date
-    """
-    cursor.execute(query)
-    total_on_leave = cursor.fetchone()
-    
-    cursor.close()
-    connection.close()
-    return total_on_leave
+    try:
+        query = "SELECT COUNT(*) AS on_leave_today FROM LeaveRequests WHERE Status = 'Approved' AND CURDATE() BETWEEN Start_Date AND End_Date"
+        cursor.execute(query)
+        return cursor.fetchone()
+    except Exception as e:
+        print(f"Error counting active leaves: {e}")
+        return {"on_leave_today": 0}
+    finally:
+        cursor.close()
+        connection.close()
+
 # ==========================================
-# ADMIN: GET ALL EMPLOYEES & PROFILES
+# 6. ADMIN: GET ALL EMPLOYEES & PROFILES
 # ==========================================
 def get_all_employees():
-    connection = sqlfunc.get_db_connection()
+    connection = get_db_connection()
     if not connection:
         return []
     cursor = connection.cursor(dictionary=True)
@@ -193,8 +192,7 @@ def get_all_employees():
             LEFT JOIN EMPprof p ON u.Employee_ID = p.Employee_ID
         """
         cursor.execute(query)
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
     except Exception as e:
         print(f"Error fetching employees: {e}")
         return []
@@ -203,10 +201,10 @@ def get_all_employees():
         connection.close()
 
 # ==========================================
-# ADMIN: GET ALL PAYROLL RECORDS
+# 7. ADMIN: GET ALL PAYROLL RECORDS
 # ==========================================
 def get_all_payroll():
-    connection = sqlfunc.get_db_connection()
+    connection = get_db_connection()
     if not connection:
         return []
     cursor = connection.cursor(dictionary=True)
@@ -219,8 +217,7 @@ def get_all_payroll():
             LEFT JOIN EMPprof p ON pay.Employee_ID = p.Employee_ID
         """
         cursor.execute(query)
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
     except Exception as e:
         print(f"Error fetching payroll: {e}")
         return []
